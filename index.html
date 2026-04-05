@@ -1,3 +1,6 @@
+/* either open index.html in browser or visit this link to view !! https://bigoaktree.vercel.app/ */
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +49,7 @@
     z-index: 0;
   }
 
-  /* hand-drawn hearts float gently across the background */
+  
   .hand-heart {
     position: fixed;
     pointer-events: none;
@@ -62,7 +65,7 @@
     100% { transform: translateY(-110vh) rotate(var(--rot-end)) scale(1); opacity: 0; }
   }
 
-  /* floating photos */
+
   .floating-photo {
     position: absolute;
     border-radius: 16px;
@@ -79,7 +82,7 @@
     transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  /* sparkle dots */
+
   .sparkle {
     position: fixed;
     width: 6px;
@@ -360,10 +363,11 @@
 
   const messages = [
     "forever my big oak tree.",
-    "my microhard!",
     "remember when you fell on the stairs during our first kiss?",
     "for my dearest labubu twink",
     "are you a jollibee's ube pie cause i want to take you out",
+    "my microhard!",
+    "hey shawty",
     "i love you sin-kei !!",
   ];
 
@@ -398,7 +402,7 @@
       const img = document.createElement('img');
       img.src = heartImages[i % heartImages.length];
       img.className = 'hand-heart';
-      const size = 40 + Math.random() * 45; // 40-85px
+      const size = 40 + Math.random() * 45; 
       img.style.width = size + 'px';
       img.style.height = 'auto';
       img.style.left = (3 + Math.random() * 90) + '%';
@@ -406,7 +410,7 @@
 
       const rotStart = -25 + Math.random() * 50;
       const rotEnd = rotStart + (-30 + Math.random() * 60);
-      const opacity = 0.15 + Math.random() * 0.15; // 0.15-0.30
+      const opacity = 0.15 + Math.random() * 0.15; 
 
       img.style.setProperty('--rot-start', rotStart + 'deg');
       img.style.setProperty('--rot-end', rotEnd + 'deg');
@@ -420,14 +424,14 @@
   }
 
   function createPhotos() {
-    // Photos are now driven by JS physics in animatePhotos()
+
     const bg = document.getElementById('bgLayer');
     const sizes = [115, 125, 135, 145];
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
-    // Stagger launch times so photos don't bunch
-    const baseInterval = 3.5; // seconds between each photo launch
+
+    const baseInterval = 3.5; 
 
     photos.forEach((src, i) => {
       const img = document.createElement('img');
@@ -438,33 +442,33 @@
       img.style.height = size + 'px';
       img.style.opacity = '0';
 
-      // Start in a central-ish zone (20%-80% of screen width)
+
       const startX = 0.2 * vw + Math.random() * 0.6 * vw - size / 2;
       img.style.left = startX + 'px';
       img.style.top = (vh + 20) + 'px';
 
       bg.appendChild(img);
 
-      // Store physics state on the element
+
       img._phys = {
         x: startX,
         y: vh + 20,
         baseX: startX,
-        xOffset: 0, // deflection offset
+        xOffset: 0, 
         size: size,
-        speed: 0.95 + Math.random() * 0.5, // px per frame (~60fps)
+        speed: 0.95 + Math.random() * 0.5, 
         rotation: -4 + Math.random() * 8,
         rotSpeed: 0.02 + Math.random() * 0.03,
-        delay: i * baseInterval * 60, // frames to wait before launching
+        delay: i * baseInterval * 60, 
         launched: false,
         deflected: false,
-        deflectDir: 0, // -1 left, +1 right
+        deflectDir: 0, 
         opacity: 0,
-        phase: Math.random() * Math.PI * 2, // for gentle horizontal sway
+        phase: Math.random() * Math.PI * 2, 
       };
     });
 
-    // Start the physics loop
+
     requestAnimationFrame(animatePhotos);
   }
 
@@ -479,20 +483,20 @@
     const vw = window.innerWidth;
     const padding = 24;
 
-    // Card zone with padding
+  
     const cardTop = cardRect.top - padding;
     const cardBottom = cardRect.bottom + padding;
     const cardLeft = cardRect.left - padding;
     const cardRight = cardRect.right + padding;
 
     const allPhotos = bg.querySelectorAll('.floating-photo');
-    const activePhotos = []; // track positions for overlap checks
+    const activePhotos = []; 
 
     allPhotos.forEach((img) => {
       const p = img._phys;
       if (!p) return;
 
-      // Wait for launch delay
+     
       if (!p.launched) {
         if (frameCount >= p.delay) {
           p.launched = true;
@@ -502,16 +506,16 @@
         }
       }
 
-      // Move upward — fast at bottom, slow at top
-      const normalizedY = 1 - (p.y / vh); // 0 at bottom, 1 at top
+      
+      const normalizedY = 1 - (p.y / vh); 
       const speedMultiplier = Math.max(0.3, 1.8 - normalizedY * 1.5);
       p.y -= p.speed * speedMultiplier;
 
-      // Gentle horizontal sway
+     
       const sway = Math.sin(frameCount * 0.008 + p.phase) * 0.3;
       p.rotation += p.rotSpeed;
 
-      // Fade in quickly, fade out slowly at top
+     
       if (p.y > vh - 80) {
         p.opacity = Math.min(1, (vh + 20 - p.y) / 100);
       } else if (p.y < vh * 0.15) {
@@ -520,7 +524,7 @@
         p.opacity = Math.min(p.opacity + 0.03, 0.9);
       }
 
-      // Check card collision
+     
       const imgCenterX = p.baseX + p.xOffset + p.size / 2;
       const imgTop = p.y;
       const imgBottom = p.y + p.size;
@@ -530,27 +534,27 @@
 
       if (overlapsVertically && overlapsHorizontally && !p.deflected) {
         p.deflected = true;
-        // Decide which side to push to based on which edge is closer
+        
         if (imgCenterX < (cardLeft + cardRight) / 2) {
-          // Push left
+          
           p.deflectDir = -1;
           p.xOffset = cardLeft - p.baseX - p.size - 10;
         } else {
-          // Push right
+          
           p.deflectDir = 1;
           p.xOffset = cardRight - p.baseX + 10;
         }
         img.classList.add('deflecting');
-        // Remove the transition class after animation completes
+      
         setTimeout(() => img.classList.remove('deflecting'), 600);
       }
 
-      // Once past the card, gently drift back toward center (optional: keep offset)
+    
       if (p.deflected && imgBottom < cardTop - 30) {
-        // Stay deflected but can drift slightly
+      
       }
 
-      // Check overlap with other active photos — push apart if more than corners overlap
+
       const myRect = {
         x: p.baseX + p.xOffset + sway,
         y: p.y,
@@ -563,7 +567,7 @@
         const overlapY = Math.min(myRect.y + myRect.h, other.y + other.h) - Math.max(myRect.y, other.y);
 
         if (overlapX > myRect.w * 0.25 && overlapY > myRect.h * 0.25) {
-          // More than corner overlap — nudge horizontally
+         
           if (myRect.x < other.x) {
             p.xOffset -= 1.5;
           } else {
@@ -572,10 +576,10 @@
         }
       }
 
-      // Clamp to screen bounds
+ 
       const finalX = Math.max(5, Math.min(vw - p.size - 5, p.baseX + p.xOffset + sway));
 
-      // Apply position
+    
       img.style.left = finalX + 'px';
       img.style.top = p.y + 'px';
       img.style.opacity = p.opacity;
@@ -583,7 +587,7 @@
 
       activePhotos.push(myRect);
 
-      // Reset when off screen
+ 
       if (p.y < -p.size - 20) {
         p.y = vh + 20 + Math.random() * 100;
         p.baseX = 0.2 * vw + Math.random() * 0.6 * vw - p.size / 2;
